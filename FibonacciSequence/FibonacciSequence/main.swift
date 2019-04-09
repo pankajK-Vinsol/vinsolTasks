@@ -10,12 +10,19 @@ import Foundation
 
 func fibonacciValue(_ value: Int) -> Int{
     var fiboArray: [Int] = []
-    fiboArray.append(1)
-    fiboArray.append(1)
-    for i in 2 ..< value{
-        fiboArray.append(fiboArray[i - 1] + fiboArray[i - 2])
+    fiboArray = [1, 1]
+    if value > 1{
+        for i in 2 ..< value{
+            fiboArray.append(fiboArray[i - 1] + fiboArray[i - 2])
+        }
+        return fiboArray[value - 1]
     }
-    return fiboArray[value - 1]
+    else if value > 0{
+        return fiboArray[value]
+    }
+    else{
+        return 0
+    }
 }
 
 print("Provide length of fibonacci sequence.")
