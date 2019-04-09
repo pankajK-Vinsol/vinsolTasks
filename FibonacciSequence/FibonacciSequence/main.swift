@@ -17,7 +17,7 @@ func fibonacciValue(_ value: Int) -> Int{
         }
         return fiboArray[value - 1]
     }
-    else if value > 0{
+    else if value >= 0{
         return fiboArray[value]
     }
     else{
