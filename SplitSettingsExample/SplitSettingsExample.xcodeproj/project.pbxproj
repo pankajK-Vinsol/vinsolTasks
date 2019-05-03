@@ -23,6 +23,8 @@
 		460394BD22797356004F9FEA /* SettingsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460394B722797355004F9FEA /* SettingsHeaderView.swift */; };
 		460394BE22797356004F9FEA /* SettingsSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460394B822797355004F9FEA /* SettingsSectionHeader.swift */; };
 		460394C02279CFCC004F9FEA /* SettingsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460394BF2279CFCC004F9FEA /* SettingsData.swift */; };
+		46A98154227C25970002269E /* DNDSettingsFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A98152227C25970002269E /* DNDSettingsFooter.swift */; };
+		46A98155227C25970002269E /* DNDSettingsFooter.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46A98153227C25970002269E /* DNDSettingsFooter.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +67,8 @@
 		460394B722797355004F9FEA /* SettingsHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsHeaderView.swift; sourceTree = "<group>"; };
 		460394B822797355004F9FEA /* SettingsSectionHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsSectionHeader.swift; sourceTree = "<group>"; };
 		460394BF2279CFCC004F9FEA /* SettingsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsData.swift; sourceTree = "<group>"; };
+		46A98152227C25970002269E /* DNDSettingsFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DNDSettingsFooter.swift; sourceTree = "<group>"; };
+		46A98153227C25970002269E /* DNDSettingsFooter.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DNDSettingsFooter.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,6 +160,8 @@
 				460394B622797355004F9FEA /* SettingsRowView.xib */,
 				460394B722797355004F9FEA /* SettingsHeaderView.swift */,
 				460394B822797355004F9FEA /* SettingsSectionHeader.swift */,
+				46A98152227C25970002269E /* DNDSettingsFooter.swift */,
+				46A98153227C25970002269E /* DNDSettingsFooter.xib */,
 			);
 			path = SettingsTableViews;
 			sourceTree = "<group>";
@@ -268,6 +274,7 @@
 				460394BA22797356004F9FEA /* SettingsSectionHeader.xib in Resources */,
 				4603948A22796FBD004F9FEA /* Assets.xcassets in Resources */,
 				460394B122797337004F9FEA /* ic_keyboard.png in Resources */,
+				46A98155227C25970002269E /* DNDSettingsFooter.xib in Resources */,
 				460394BB22797356004F9FEA /* SettingsHeaderView.xib in Resources */,
 				4603948822796FBC004F9FEA /* Main.storyboard in Resources */,
 				460394BC22797356004F9FEA /* SettingsRowView.xib in Resources */,
@@ -295,6 +302,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				46A98154227C25970002269E /* DNDSettingsFooter.swift in Sources */,
 				460394C02279CFCC004F9FEA /* SettingsData.swift in Sources */,
 				460394B922797356004F9FEA /* SettingsRowView.swift in Sources */,
 				4603948522796FBC004F9FEA /* DetailViewController.swift in Sources */,

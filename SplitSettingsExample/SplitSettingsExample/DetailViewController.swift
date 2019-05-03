@@ -36,6 +36,7 @@ class DetailViewController: UIViewController {
         detailsTableView.register(UINib(nibName: "SettingsHeaderView", bundle: nil), forCellReuseIdentifier: "SettingsHeaderView")
         detailsTableView.register(UINib(nibName: "SettingsSectionHeader", bundle: nil), forCellReuseIdentifier: "SettingsSectionHeader")
         detailsTableView.register(UINib(nibName: "SettingsRowView", bundle: nil), forCellReuseIdentifier: "SettingsRowView")
+        detailsTableView.register(UINib(nibName: "DNDSettingsFooter", bundle: nil), forCellReuseIdentifier: "DNDSettingsFooter")
     }
     
     func configureView() {
@@ -72,8 +73,24 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
         return 40.0
     }
     
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "DNDSettingsFooter") as! DNDSettingsFooter
+        if indexTag == "21" {
+            cell.footerLabel.text = "When Do Not Disturb is enabled, calls and alerts that arrived will be silenced, and a moon icon will appear in the status bar."
+        }
+        else if indexTag == "13"{
+            cell.footerLabel.text = "Turn Off Cellular data to restrict all data to Wi-Fi, including email, web browsing and push notifications."
+        } else {
+            cell.footerLabel.text = ""
+        }
+        return cell
+    }
+    
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 0.1
+        if indexTag == "21" || indexTag == "13"{
+            return 100.0
+        }
+        return 0.01
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -88,6 +105,9 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
             if section == 0 || section == 3{
                 return 1
             }
+            return 2
+        }
+        if indexTag == "13" {
             return 2
         }
         if indexTag == "14" {
@@ -122,8 +142,16 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
             cell.toggleOption.setOn(settings.bluetooth ?? false, animated: true)
         }
         if indexTag == "13" {
-            cell.title.text = "Cellular Data"
-            cell.toggleOption.setOn(settings.mobileData ?? false, animated: true)
+            if indexPath.row == 0 {
+                cell.title.text = "Cellular Data"
+                cell.toggleOption.setOn(settings.mobileData ?? false, animated: true)
+            } else {
+                cell.title.text = "Cellular Data Options"
+                cell.toggleOption.isHidden = true
+                cell.arrow.isHidden = false
+                cell.detail.isHidden = false
+                cell.detail.text = "Roaming On"
+            }
         }
         if indexTag == "14" {
             cell.toggleOption.isHidden = true
@@ -184,7 +212,6 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
                 cell.detail.text = "Standard"
             }
         }
-        
         cell.toggleOption.addTarget(self, action: #selector(setValues(_:)), for: .touchUpInside)
         
         return cell
