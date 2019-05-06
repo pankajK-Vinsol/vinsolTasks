@@ -35,7 +35,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="alphabetCell" reuseIdentifier="collectionCell" id="3gf-5J-r2P" customClass="alphabetCell" customModule="GridAdditionDeletionAnimation" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="alphabetCell" reuseIdentifier="collectionCell" id="3gf-5J-r2P" customClass="AlphabetCell" customModule="GridAdditionDeletionAnimation" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
@@ -58,7 +58,7 @@
                                             <constraint firstAttribute="bottom" secondItem="gO0-n6-rgF" secondAttribute="bottom" id="nGn-Gm-mcA"/>
                                         </constraints>
                                         <connections>
-                                            <outlet property="alphaLabel" destination="gO0-n6-rgF" id="lcC-wJ-jHO"/>
+                                            <outlet property="alphaLabel" destination="gO0-n6-rgF" id="QqI-wI-q2S"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>

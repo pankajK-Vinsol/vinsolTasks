@@ -14,8 +14,8 @@
 		460064A2226EF55400F059E6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 460064A0226EF55400F059E6 /* LaunchScreen.storyboard */; };
 		460064AD226EF55400F059E6 /* GridAdditionDeletionAnimationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460064AC226EF55400F059E6 /* GridAdditionDeletionAnimationTests.swift */; };
 		460064B8226EF55400F059E6 /* GridAdditionDeletionAnimationUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460064B7226EF55400F059E6 /* GridAdditionDeletionAnimationUITests.swift */; };
-		460064C6226EFDB700F059E6 /* alphabetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460064C5226EFDB700F059E6 /* alphabetCell.swift */; };
 		460064C8226F058D00F059E6 /* ConfigureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460064C7226F058D00F059E6 /* ConfigureViewController.swift */; };
+		46FF8234227FF82F000FF072 /* AlphabetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FF8233227FF82F000FF072 /* AlphabetCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,8 +49,8 @@
 		460064B3226EF55400F059E6 /* GridAdditionDeletionAnimationUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GridAdditionDeletionAnimationUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		460064B7226EF55400F059E6 /* GridAdditionDeletionAnimationUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridAdditionDeletionAnimationUITests.swift; sourceTree = "<group>"; };
 		460064B9226EF55400F059E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		460064C5226EFDB700F059E6 /* alphabetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = alphabetCell.swift; sourceTree = "<group>"; };
 		460064C7226F058D00F059E6 /* ConfigureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigureViewController.swift; sourceTree = "<group>"; };
+		46FF8233227FF82F000FF072 /* AlphabetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlphabetCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,7 +105,7 @@
 				46006499226EF55300F059E6 /* ViewController.swift */,
 				460064C7226F058D00F059E6 /* ConfigureViewController.swift */,
 				4600649B226EF55300F059E6 /* Main.storyboard */,
-				460064C5226EFDB700F059E6 /* alphabetCell.swift */,
+				46FF8233227FF82F000FF072 /* AlphabetCell.swift */,
 				4600649E226EF55400F059E6 /* Assets.xcassets */,
 				460064A0226EF55400F059E6 /* LaunchScreen.storyboard */,
 				460064A3226EF55400F059E6 /* Info.plist */,
@@ -264,7 +264,7 @@
 			files = (
 				4600649A226EF55300F059E6 /* ViewController.swift in Sources */,
 				460064C8226F058D00F059E6 /* ConfigureViewController.swift in Sources */,
-				460064C6226EFDB700F059E6 /* alphabetCell.swift in Sources */,
+				46FF8234227FF82F000FF072 /* AlphabetCell.swift in Sources */,
 				46006498226EF55300F059E6 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

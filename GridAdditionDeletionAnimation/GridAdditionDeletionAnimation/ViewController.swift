@@ -10,23 +10,23 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    var itemsList = ["a", "b", "c", "d","e", "f", "g", "h","i", "j", "k", "l","m", "n", "o", "p","q", "r", "s", "t","u", "v", "w", "x","y","z"]
+    private var itemsList = ["a", "b", "c", "d","e", "f", "g", "h","i", "j", "k", "l","m", "n", "o", "p","q", "r", "s", "t","u", "v", "w", "x","y","z"]
     
-    var interItemSpace: CGFloat = 5
-    var cellWidth: CGFloat = 50
-    var cellHeight: CGFloat = 50
-    var lineSpace: CGFloat = 5
-    var animationSpeed: Double = 3.0
-    var itemsWidth = CGFloat()
+    private var interItemSpace: CGFloat = 5
+    private var cellWidth: CGFloat = 50
+    private var cellHeight: CGFloat = 50
+    private var lineSpace: CGFloat = 5
+    private var animationSpeed: Double = 1.0
+    private var itemsWidth = CGFloat()
     
-    @IBOutlet weak var alphabetCollection: UICollectionView!
+    @IBOutlet weak private var alphabetCollection: UICollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         itemsWidth = cellWidth
     }
     
-    @IBAction func configureScreen(_ sender: UIButton) {
+    @IBAction private func configureScreen(_ sender: UIButton) {
         let nextVC: ConfigureViewController = self.storyboard?.instantiateViewController(withIdentifier: "ConfigureViewController") as! ConfigureViewController
         nextVC.animationSpeed = animationSpeed
         nextVC.cellHeight = cellHeight
@@ -37,15 +37,22 @@ class ViewController: UIViewController {
         self.navigationController?.pushViewController(nextVC, animated: true)
     }
     
-    @IBAction func insertThreeEnd(_ sender: UIButton) {
+    @IBAction private func insertThreeEnd(_ sender: UIButton) {
         for _ in 0 ... 2 {
             itemsList.append("@")
             updateGrid(indexPath: IndexPath(item: itemsList.count - 1, section: 0), buttonTag: 1)
         }
     }
     
-    @IBAction func deleteThreeEnd(_ sender: UIButton) {
-        if itemsList.count > 2 {
+    @IBAction private func deleteThreeEnd(_ sender: UIButton) {
+        if itemsList.count > 0 {
+            guard itemsList.count > 2 else {
+                for _ in 0 ... itemsList.count - 1 {
+                    itemsList.removeLast()
+                    updateGrid(indexPath: IndexPath(item: itemsList.count, section: 0), buttonTag: 2)
+                }
+                return
+            }
             for _ in 0 ... 2 {
                 itemsList.removeLast()
                 updateGrid(indexPath: IndexPath(item: itemsList.count, section: 0), buttonTag: 2)
@@ -53,14 +60,14 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction func updateIndexTwo(_ sender: UIButton) {
+    @IBAction private func updateIndexTwo(_ sender: UIButton) {
         if itemsList.count > 2 {
             itemsList[2] = "2"
             updateGrid(indexPath: IndexPath(item: 2, section: 0), buttonTag: 3)
         }
     }
     
-    @IBAction func moveItemE(_ sender: UIButton) {
+    @IBAction private func moveItemE(_ sender: UIButton) {
         guard let eIndex = itemsList.firstIndex(where: { $0 == "e" }) else {
             return
         }
@@ -69,8 +76,17 @@ class ViewController: UIViewController {
         updateGrid(indexPath: IndexPath(item: eIndex, section: 0), buttonTag: 4)
     }
     
-    @IBAction func deleteThenInsert(_ sender: UIButton) {
-        if itemsList.count > 2 {
+    @IBAction private func deleteThenInsert(_ sender: UIButton) {
+        if itemsList.count > 0 {
+            guard itemsList.count > 2 else {
+                for _ in 0 ... itemsList.count - 1 {
+                    itemsList.removeFirst()
+                    updateGrid(indexPath: IndexPath( item: 0, section: 0), buttonTag: 2)
+                    itemsList.append("&")
+                    updateGrid(indexPath: IndexPath(item: self.itemsList.count - 1 , section: 0), buttonTag: 1)
+                }
+                return
+            }
             for _ in 0 ... 2 {
                 itemsList.removeFirst()
                 updateGrid(indexPath: IndexPath( item: 0, section: 0), buttonTag: 2)
@@ -80,8 +96,17 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction func insertThenDelete(_ sender: UIButton) {
-        if itemsList.count > 2 {
+    @IBAction private func insertThenDelete(_ sender: UIButton) {
+        if itemsList.count > 0 {
+            guard itemsList.count > 2 else {
+                for _ in 0 ... itemsList.count - 1 {
+                    itemsList.append("#")
+                    updateGrid(indexPath: IndexPath(item: self.itemsList.count - 1 , section: 0), buttonTag: 1)
+                    itemsList.removeFirst()
+                    updateGrid(indexPath: IndexPath(item: 0, section: 0), buttonTag: 2)
+                }
+                return
+            }
             for _ in 0 ... 2 {
                 itemsList.append("#")
                 updateGrid(indexPath: IndexPath(item: self.itemsList.count - 1 , section: 0), buttonTag: 1)
@@ -91,47 +116,43 @@ class ViewController: UIViewController {
         }
     }
     
-    func updateGrid(indexPath: IndexPath, buttonTag: Int) {
+    private func updateGrid(indexPath: IndexPath, buttonTag: Int) {
         let cell = alphabetCollection.cellForItem(at: indexPath)
+        let cell2 = alphabetCollection.dequeueReusableCell(withReuseIdentifier: "collectionCell", for: indexPath)
         if buttonTag == 1 {
-            UIView.animate(withDuration: animationSpeed, delay: 0.0, options: .transitionCrossDissolve, animations: {
-                self.alphabetCollection.insertItems(at: [indexPath]) }, completion: nil)
+            UIView.animate(withDuration: animationSpeed, delay: 0.0, options: .transitionCrossDissolve, animations: { self.alphabetCollection.insertItems(at: [indexPath]) }, completion: nil)
         }
         if buttonTag == 2 {
-            UIView.transition(with: cell!, duration: animationSpeed, options: .transitionFlipFromRight, animations: { self.alphabetCollection.deleteItems(at: [indexPath] )}, completion: nil)
+            UIView.transition(with: cell ?? cell2 , duration: animationSpeed, options: .transitionFlipFromRight, animations: { self.alphabetCollection.deleteItems(at: [indexPath] )}, completion: nil)
         }
         if buttonTag == 3 {
-            UIView.transition(with: cell!, duration: animationSpeed, options: .transitionCurlUp, animations: {         self.alphabetCollection.reloadItems(at: [indexPath]) }, completion: nil)
+            UIView.transition(with: cell ?? cell2, duration: animationSpeed, options: .transitionCurlUp, animations: { self.alphabetCollection.reloadItems(at: [indexPath]) }, completion: nil)
         }
         if buttonTag == 4 {
-            UIView.transition(with: cell!, duration: animationSpeed, options: .transitionFlipFromRight, animations: { self.alphabetCollection.moveItem(at: indexPath, to: IndexPath(item: self.itemsList.count - 1, section: 0)) }, completion: nil)
+            UIView.transition(with: cell ?? cell2, duration: animationSpeed, options: .transitionFlipFromRight, animations: { self.alphabetCollection.moveItem(at: indexPath, to: IndexPath(item: self.itemsList.count - 1, section: 0)) }, completion: nil)
         }
-//        if buttonTag == 5 {
-//            self.alphabetCollection.performBatchUpdates({ UIView.animate(withDuration: animationSpeed, delay: 0.0, options: .transitionFlipFromRight, animations: {
-//                self.alphabetCollection.deleteItems(at: [IndexPath(item: 0, section: 0)])
-//                self.alphabetCollection.insertItems(at: [indexPath]) } , completion: nil) }, completion: nil)
-//        }
-//        if buttonTag == 6 {
-//            self.alphabetCollection.performBatchUpdates({ UIView.animate(withDuration: animationSpeed, delay: 0.0, options: .transitionFlipFromRight, animations: {
-//                self.alphabetCollection.insertItems(at: [indexPath])
-//                self.alphabetCollection.deleteItems(at: [IndexPath(item: 0, section: 0)]) } , completion: nil) }, completion: nil)
-//        }
+        //        if buttonTag == 5 {
+        //            self.alphabetCollection.performBatchUpdates({ UIView.animate(withDuration: animationSpeed, delay: 0.0, options: .transitionFlipFromRight, animations: {
+        //                self.alphabetCollection.deleteItems(at: [IndexPath(item: 0, section: 0)])
+        //                self.alphabetCollection.insertItems(at: [indexPath]) } , completion: nil) }, completion: nil)
+        //        }
+        //        if buttonTag == 6 {
+        //            self.alphabetCollection.performBatchUpdates({ UIView.animate(withDuration: animationSpeed, delay: 0.0, options: .transitionFlipFromRight, animations: {
+        //                self.alphabetCollection.insertItems(at: [indexPath])
+        //                self.alphabetCollection.deleteItems(at: [IndexPath(item: 0, section: 0)]) } , completion: nil) }, completion: nil)
+        //        }
     }
 }
 
 extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return itemsList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = alphabetCollection.dequeueReusableCell(withReuseIdentifier: "collectionCell", for: indexPath) as! alphabetCell
-        cell.alphaLabel.text = itemsList[indexPath.item]
+        let cell = alphabetCollection.dequeueReusableCell(withReuseIdentifier: "collectionCell", for: indexPath) as! AlphabetCell
+        cell.setCellText(textValue: itemsList[indexPath.item])
         return cell
     }
     
@@ -167,7 +188,6 @@ extension ViewController : UICollectionViewDelegateFlowLayout {
         let rightEdgeSpace = spaceLeft / 2.0
         return UIEdgeInsets(top: 5, left: leftEdgeSpace, bottom: 5, right: rightEdgeSpace)
     }
-
 }
 
 extension ViewController: configureViewDelegate {
