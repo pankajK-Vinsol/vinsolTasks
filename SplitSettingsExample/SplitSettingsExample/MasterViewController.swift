@@ -8,27 +8,58 @@
 
 import UIKit
 
-class MasterViewController: UITableViewController {
+class MasterViewController: UITableViewController, UISearchResultsUpdating {
 
     private var detailViewController: DetailViewController? = nil
     private let settings = settingsData()
     
-    private let settingsArray = [[], ["Airplane Mode", "Wifi", "Bluetooth", "Mobile Data", "Carrier"],
+    private let settingsArray = [["Airplane Mode", "Wi-Fi", "Bluetooth", "Mobile Data", "Carrier"],
     ["Notifications", "Do Not Disturb"], ["General", "Wallpaper", "Display & Brightness"]]
+    
+    private let tableData = ["Airplane Mode", "Wi-Fi", "Bluetooth", "Mobile Data", "Carrier",
+    "Notifications", "Do Not Disturb", "General", "Wallpaper", "Display & Brightness"]
+    
+    private var filteredTableData = [String]()
+    var resultSearchController = UISearchController()
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        filteredTableData.removeAll(keepingCapacity: false)
+        
+        let searchPredicate = NSPredicate(format: "SELF CONTAINS[c] %@", searchController.searchBar.text!)
+        let array = (tableData as NSArray).filtered(using: searchPredicate)
+        filteredTableData = array as! [String]
+        
+        self.tableView.reloadData()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setSplitView()
         setViewOnDidLoad()
+        setSearchController()
         notificationObserver()
+    }
+    
+    private func setSearchController() {
+        resultSearchController = ({
+            let controller = UISearchController(searchResultsController: nil)
+            controller.searchResultsUpdater = self
+            controller.dimsBackgroundDuringPresentation = false
+            controller.searchBar.placeholder = "Settings"
+            controller.searchBar.sizeToFit()
+            tableView.tableHeaderView = controller.searchBar
+            return controller
+        })()
+        
+        tableView.reloadData()
     }
     
     private func setSplitView() {
         if let split = splitViewController {
             let controllers = split.viewControllers
             split.preferredDisplayMode = .allVisible
-            detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
+            detailViewController = (controllers[controllers.count - 1] as! UINavigationController).topViewController as? DetailViewController
         }
     }
     
@@ -46,41 +77,29 @@ class MasterViewController: UITableViewController {
         clearsSelectionOnViewWillAppear = splitViewController!.isCollapsed
         super.viewWillAppear(animated)
     }
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showDetail" {
-            if self.tableView.indexPathForSelectedRow != nil {
-                let controller = (segue.destination as! UINavigationController).topViewController
-                    as! DetailViewController
-                
-                controller.detailItem  = "\(String(describing: self.tableView.indexPathForSelectedRow?.section))\(String(describing: self.tableView.indexPathForSelectedRow?.row))"
-                controller.navigationItem.leftBarButtonItem =
-                    splitViewController?.displayModeButtonItem
-                controller.navigationItem.leftItemsSupplementBackButton
-                    = true
-            }
-        }
-    }
+    
 }
 
 //MARK: table view functions
 extension MasterViewController {
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 4
+        if (resultSearchController.isActive) {
+            return 1
+        }
+        return 3
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsHeaderView") as! SettingsHeaderView
-            return cell
+        if (resultSearchController.isActive) {
+            return nil
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsSectionHeader") as! SettingsSectionHeader
         return cell
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 {
-            return 50.0
+        if (resultSearchController.isActive) {
+            return 0
         }
         return 40.0
     }
@@ -90,16 +109,20 @@ extension MasterViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 1 {
-            return 5
+        if  (resultSearchController.isActive) {
+            return filteredTableData.count
+        } else {
+            if section == 0 {
+                return 5
+            }
+            if section == 1 {
+                return 2
+            }
+            if section == 2 {
+                return 3
+            }
+            return 0
         }
-        if section == 2 {
-            return 2
-        }
-        if section == 3 {
-            return 3
-        }
-        return 0
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -118,61 +141,75 @@ extension MasterViewController {
         
         cell.setBackgroundColor(color: viewColor)
         cell.hideAndShowItems(isColorView: false, isArrow: false, isDetail: true, isToggle: true)
-        
-        let titleText = settingsArray[indexPath.section][indexPath.row]
-        cell.setTitleText(text: titleText)
         cell.setColorViewWidth(value: 36.0)
         
-        if indexPath.section == 1 {
-            if indexPath.row == 3 {
-                cell.hideAndShowItems(isColorView: false, isArrow: false, isDetail: true, isToggle: true)
-            } else {
-                cell.hideAndShowItems(isColorView: false, isArrow: false, isDetail: false, isToggle: true)
-            }
-            if indexPath.row == 0 {
-                cell.hideAndShowItems(isColorView: false, isArrow: true, isDetail: true, isToggle: false)
-                
-                let airplaneValue = settings.airplaneMode ?? false
-                cell.setToggleValue(value: settings.airplaneMode ?? false)
-                
-                cell.toggleAction = { [self] in
-                    self.settings.defaults.set(!airplaneValue, forKey: "airplaneMode")
-                }
-            }
-            if indexPath.row == 1 {
-                let wifiValue = settings.wifiState ?? false
-                if wifiValue {
-                    cell.setDetailText(text: settings.wifiName ?? "")
+        if (resultSearchController.isActive) {
+            cell.setTitleText(text: filteredTableData[indexPath.row])
+            return cell
+        } else {
+            let titleText = settingsArray[indexPath.section][indexPath.row]
+            cell.setTitleText(text: titleText)
+            
+            if indexPath.section == 0 {
+                if indexPath.row == 3 {
+                    cell.hideAndShowItems(isColorView: false, isArrow: false, isDetail: true, isToggle: true)
                 } else {
-                    cell.setDetailText(text: "")
+                    cell.hideAndShowItems(isColorView: false, isArrow: false, isDetail: false, isToggle: true)
+                }
+                if indexPath.row == 0 {
+                    cell.hideAndShowItems(isColorView: false, isArrow: true, isDetail: true, isToggle: false)
+                    
+                    let airplaneValue = settings.airplaneMode ?? false
+                    cell.setToggleValue(value: settings.airplaneMode ?? false)
+                    
+                    cell.toggleAction = { [self] in
+                        self.settings.defaults.set(!airplaneValue, forKey: "airplaneMode")
+                    }
+                }
+                if indexPath.row == 1 {
+                    let wifiValue = settings.wifiState ?? false
+                    if wifiValue {
+                        cell.setDetailText(text: settings.wifiName ?? "")
+                    } else {
+                        cell.setDetailText(text: "")
+                    }
+                }
+                if indexPath.row == 2 {
+                    let bluetooth = settings.bluetooth ?? false
+                    if bluetooth {
+                        cell.setDetailText(text: "On")
+                    } else {
+                        cell.setDetailText(text: "Off")
+                    }
+                }
+                if indexPath.row == 4 {
+                    cell.setDetailText(text: settings.networkName ?? "")
                 }
             }
-            if indexPath.row == 2 {
-                let bluetooth = settings.bluetooth ?? false
-                if bluetooth {
-                    cell.setDetailText(text: "On")
-                } else {
-                    cell.setDetailText(text: "Off")
-                }
-            }
-            if indexPath.row == 4 {
-                cell.setDetailText(text: settings.networkName ?? "")
-            }
+            return cell
         }
-        return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let splitView = self.splitViewController else {
             return
         }
+ 
         if splitView.isCollapsed {
             let nextVC: DetailViewController = self.storyboard?.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
-            nextVC.indexTag = "\(indexPath.section)\(indexPath.row )"
+            if (resultSearchController.isActive) {
+                nextVC.indexTag = filteredTableData[indexPath.row]
+            } else {
+                nextVC.indexTag = settingsArray[indexPath.section][indexPath.row]
+            }
             self.navigationController?.pushViewController(nextVC, animated: true)
         } else {
             if (detailViewController != nil) {
-                self.detailViewController!.detailItem = "\(indexPath.section)\(indexPath.row )"
+                if (resultSearchController.isActive) {
+                    self.detailViewController?.detailItem = filteredTableData[indexPath.row]
+                } else {
+                    self.detailViewController?.detailItem = settingsArray[indexPath.section][indexPath.row]
+                }
             }
         }
     }
