@@ -10,7 +10,8 @@ import UIKit
 
 class SettingsHeaderView: UITableViewCell {
 
-    @IBOutlet weak var searchSettings: UISearchBar!
+    @IBOutlet weak private var searchSettings: UISearchBar!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

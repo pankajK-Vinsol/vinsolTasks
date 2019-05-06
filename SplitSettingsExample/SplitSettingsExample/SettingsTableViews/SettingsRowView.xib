@@ -73,6 +73,9 @@
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="KZt-fq-ZQs"/>
                                 </constraints>
                                 <color key="onTintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <action selector="toggleClick:" destination="KGk-i7-Jjw" eventType="valueChanged" id="zdm-Rt-M2T"/>
+                                </connections>
                             </switch>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3sa-eh-BjX">
                                 <rect key="frame" x="58" y="85.666666666666671" width="262" height="1"/>

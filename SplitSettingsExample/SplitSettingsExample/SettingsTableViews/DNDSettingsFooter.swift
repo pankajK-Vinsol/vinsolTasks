@@ -10,7 +10,7 @@ import UIKit
 
 class DNDSettingsFooter: UITableViewCell {
 
-    @IBOutlet weak var footerLabel: UILabel!
+    @IBOutlet weak private var footerLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -18,7 +18,10 @@ class DNDSettingsFooter: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
+    }
+    
+    func setFooterText(data: String) {
+        footerLabel.text = data
     }
     
 }

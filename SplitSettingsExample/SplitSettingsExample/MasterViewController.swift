@@ -10,29 +10,36 @@ import UIKit
 
 class MasterViewController: UITableViewController {
 
-    var detailViewController: DetailViewController? = nil
-    let settings = settingsData()
-    let settingsArray = [[], ["Airplane Mode", "Wifi", "Bluetooth", "Mobile Data", "Carrier"],
+    private var detailViewController: DetailViewController? = nil
+    private let settings = settingsData()
+    
+    private let settingsArray = [[], ["Airplane Mode", "Wifi", "Bluetooth", "Mobile Data", "Carrier"],
     ["Notifications", "Do Not Disturb"], ["General", "Wallpaper", "Display & Brightness"]]
     
     override func viewDidLoad() {
         super.viewDidLoad()
- 
+        
+        setSplitView()
+        setViewOnDidLoad()
+        notificationObserver()
+    }
+    
+    private func setSplitView() {
         if let split = splitViewController {
             let controllers = split.viewControllers
             split.preferredDisplayMode = .allVisible
             detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
         }
-        
-        setViewOnDidLoad()
-        NotificationCenter.default.addObserver(self, selector: #selector(valuesEdited), name: NSNotification.Name("settingsChange"), object: nil)
-
     }
     
-    func setViewOnDidLoad() {
+    private func setViewOnDidLoad() {
         tableView.register(UINib(nibName: "SettingsHeaderView", bundle: nil), forCellReuseIdentifier: "SettingsHeaderView")
         tableView.register(UINib(nibName: "SettingsSectionHeader", bundle: nil), forCellReuseIdentifier: "SettingsSectionHeader")
         tableView.register(UINib(nibName: "SettingsRowView", bundle: nil), forCellReuseIdentifier: "SettingsRowView")
+    }
+    
+    private func notificationObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(valuesEdited), name: NSNotification.Name("settingsChange"), object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -54,11 +61,10 @@ class MasterViewController: UITableViewController {
             }
         }
     }
-    
-    @objc func valuesEdited(notification: NSNotification) {
-        tableView.reloadData()
-    }
-    
+}
+
+//MARK: table view functions
+extension MasterViewController {
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 4
     }
@@ -101,50 +107,61 @@ class MasterViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsRowView", for: indexPath) as! SettingsRowView
         cell.selectionStyle = .none
         
+        var viewColor = UIColor()
         if indexPath.row % 3 == 2 {
-            cell.roundedView.backgroundColor = UIColor(red: 253.0/255, green: 149.0/255, blue: 38.0/255, alpha: 1.0)
+            viewColor = UIColor(red: 253.0/255, green: 149.0/255, blue: 38.0/255, alpha: 1.0)
         } else if indexPath.row % 3 == 1 {
-            cell.roundedView.backgroundColor = UIColor(red: 21.0/255, green: 122.0/255, blue: 251.0/255, alpha: 1.0)
+            viewColor = UIColor(red: 21.0/255, green: 122.0/255, blue: 251.0/255, alpha: 1.0)
         } else {
-            cell.roundedView.backgroundColor = UIColor(red: 251.0/255, green: 58.0/255, blue: 48.0/255, alpha: 1.0)
+            viewColor = UIColor(red: 251.0/255, green: 58.0/255, blue: 48.0/255, alpha: 1.0)
         }
         
-        cell.toggleOption.isHidden = true
-        cell.arrow.isHidden = false
-        cell.detail.isHidden = true
-        cell.title.text = settingsArray[indexPath.section][indexPath.row]
+        cell.setBackgroundColor(color: viewColor)
+        cell.hideAndShowItems(isColorView: false, isArrow: false, isDetail: true, isToggle: true)
+        
+        let titleText = settingsArray[indexPath.section][indexPath.row]
+        cell.setTitleText(text: titleText)
+        cell.setColorViewWidth(value: 36.0)
         
         if indexPath.section == 1 {
             if indexPath.row == 3 {
-                cell.detail.isHidden = true
+                cell.hideAndShowItems(isColorView: false, isArrow: false, isDetail: true, isToggle: true)
             } else {
-                cell.detail.isHidden = false
+                cell.hideAndShowItems(isColorView: false, isArrow: false, isDetail: false, isToggle: true)
             }
             if indexPath.row == 0 {
-                cell.toggleOption.isHidden = false
-                cell.arrow.isHidden = true
-                cell.detail.isHidden = true
-                cell.toggleOption.setOn(settings.airplaneMode ?? false, animated: true)
-                cell.toggleOption.addTarget(self, action: #selector(toggleClick(_:)), for: .touchUpInside)
+                cell.hideAndShowItems(isColorView: false, isArrow: true, isDetail: true, isToggle: false)
+                
+                let airplaneValue = settings.airplaneMode ?? false
+                cell.setToggleValue(value: settings.airplaneMode ?? false)
+                
+                cell.toggleAction = { [self] in
+                    self.settings.defaults.set(!airplaneValue, forKey: "airplaneMode")
+                }
             }
             if indexPath.row == 1 {
-                cell.detail.text = settings.wifiName ?? ""
+                let wifiValue = settings.wifiState ?? false
+                if wifiValue {
+                    cell.setDetailText(text: settings.wifiName ?? "")
+                } else {
+                    cell.setDetailText(text: "")
+                }
             }
             if indexPath.row == 2 {
                 let bluetooth = settings.bluetooth ?? false
                 if bluetooth {
-                    cell.detail.text = "On"
+                    cell.setDetailText(text: "On")
                 } else {
-                    cell.detail.text = "Off"
+                    cell.setDetailText(text: "Off")
                 }
             }
             if indexPath.row == 4 {
-                cell.detail.text = settings.networkName ?? ""
+                cell.setDetailText(text: settings.networkName ?? "")
             }
         }
         return cell
     }
-
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let splitView = self.splitViewController else {
             return
@@ -158,15 +175,13 @@ class MasterViewController: UITableViewController {
                 self.detailViewController!.detailItem = "\(indexPath.section)\(indexPath.row )"
             }
         }
-
-    }
-    
-    @objc func toggleClick(_ sender: UISwitch) {
-        if sender.isOn {
-            settings.defaults.set(true, forKey: "airplaneMode")
-        } else {
-            settings.defaults.set(false, forKey: "airplaneMode")
-        }
     }
 }
 
+extension MasterViewController {
+    
+    //MARK: value changed notification action
+    @objc private func valuesEdited(notification: NSNotification) {
+        tableView.reloadData()
+    }
+}
