@@ -10,7 +10,7 @@ import UIKit
 
 // to avoid strong reference cycles, delegate is decalred with weak reference and to make it a class only protocol for using the weak reference, it is inherited with anyobject.
 
-protocol configureViewDelegate: AnyObject {
+protocol ConfigureViewDelegate: AnyObject {
     func setValues(animate: Double, width: CGFloat, height: CGFloat, itemSpace: CGFloat, lineSpacing: CGFloat)
 }
 
@@ -22,7 +22,7 @@ class ConfigureViewController: UIViewController {
     var lineSpace = CGFloat()
     var animationSpeed = Double()
     
-    weak var delegate: configureViewDelegate?
+    weak var delegate: ConfigureViewDelegate?
 
     @IBOutlet weak private var animateSpeed: UITextField!
     @IBOutlet weak private var width: UITextField!

@@ -119,18 +119,19 @@ class ViewController: UIViewController {
     private func updateGrid(indexPath: IndexPath, buttonTag: Int) {
         let cell = alphabetCollection.cellForItem(at: indexPath)
         let cell2 = alphabetCollection.dequeueReusableCell(withReuseIdentifier: "collectionCell", for: indexPath)
-        if buttonTag == 1 {
+        switch buttonTag {
+        case 1:
             UIView.animate(withDuration: animationSpeed, delay: 0.0, options: .transitionCrossDissolve, animations: { self.alphabetCollection.insertItems(at: [indexPath]) }, completion: nil)
-        }
-        if buttonTag == 2 {
+        case 2:
             UIView.transition(with: cell ?? cell2 , duration: animationSpeed, options: .transitionFlipFromRight, animations: { self.alphabetCollection.deleteItems(at: [indexPath] )}, completion: nil)
-        }
-        if buttonTag == 3 {
+        case 3:
             UIView.transition(with: cell ?? cell2, duration: animationSpeed, options: .transitionCurlUp, animations: { self.alphabetCollection.reloadItems(at: [indexPath]) }, completion: nil)
-        }
-        if buttonTag == 4 {
+        case 4:
             UIView.transition(with: cell ?? cell2, duration: animationSpeed, options: .transitionFlipFromRight, animations: { self.alphabetCollection.moveItem(at: indexPath, to: IndexPath(item: self.itemsList.count - 1, section: 0)) }, completion: nil)
+        default:
+            print("not a case")
         }
+        
         //        if buttonTag == 5 {
         //            self.alphabetCollection.performBatchUpdates({ UIView.animate(withDuration: animationSpeed, delay: 0.0, options: .transitionFlipFromRight, animations: {
         //                self.alphabetCollection.deleteItems(at: [IndexPath(item: 0, section: 0)])
@@ -190,7 +191,7 @@ extension ViewController : UICollectionViewDelegateFlowLayout {
     }
 }
 
-extension ViewController: configureViewDelegate {
+extension ViewController: ConfigureViewDelegate {
     
     func setValues(animate: Double, width: CGFloat, height: CGFloat, itemSpace: CGFloat, lineSpacing: CGFloat) {
         animationSpeed = animate
