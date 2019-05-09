@@ -20,7 +20,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating {
     "Notifications", "Do Not Disturb", "General", "Wallpaper", "Display & Brightness"]
     
     private var filteredTableData = [String]()
-    var resultSearchController = UISearchController()
+    private var resultSearchController = UISearchController()
     
     func updateSearchResults(for searchController: UISearchController) {
         filteredTableData.removeAll(keepingCapacity: false)

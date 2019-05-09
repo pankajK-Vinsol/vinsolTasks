@@ -117,17 +117,16 @@ class ViewController: UIViewController {
     }
     
     private func updateGrid(indexPath: IndexPath, buttonTag: Int) {
-        let cell = alphabetCollection.cellForItem(at: indexPath)
-        let cell2 = alphabetCollection.dequeueReusableCell(withReuseIdentifier: "collectionCell", for: indexPath)
+        let cell = alphabetCollection.cellForItem(at: indexPath) ?? alphabetCollection.dequeueReusableCell(withReuseIdentifier: "collectionCell", for: indexPath)
         switch buttonTag {
         case 1:
             UIView.animate(withDuration: animationSpeed, delay: 0.0, options: .transitionCrossDissolve, animations: { self.alphabetCollection.insertItems(at: [indexPath]) }, completion: nil)
         case 2:
-            UIView.transition(with: cell ?? cell2 , duration: animationSpeed, options: .transitionFlipFromRight, animations: { self.alphabetCollection.deleteItems(at: [indexPath] )}, completion: nil)
+            UIView.transition(with: cell, duration: animationSpeed, options: .transitionFlipFromRight, animations: { self.alphabetCollection.deleteItems(at: [indexPath] )}, completion: nil)
         case 3:
-            UIView.transition(with: cell ?? cell2, duration: animationSpeed, options: .transitionCurlUp, animations: { self.alphabetCollection.reloadItems(at: [indexPath]) }, completion: nil)
+            UIView.transition(with: cell, duration: animationSpeed, options: .transitionCurlUp, animations: { self.alphabetCollection.reloadItems(at: [indexPath]) }, completion: nil)
         case 4:
-            UIView.transition(with: cell ?? cell2, duration: animationSpeed, options: .transitionFlipFromRight, animations: { self.alphabetCollection.moveItem(at: indexPath, to: IndexPath(item: self.itemsList.count - 1, section: 0)) }, completion: nil)
+            UIView.transition(with: cell, duration: animationSpeed, options: .transitionFlipFromRight, animations: { self.alphabetCollection.moveItem(at: indexPath, to: IndexPath(item: self.itemsList.count - 1, section: 0)) }, completion: nil)
         default:
             print("not a case")
         }

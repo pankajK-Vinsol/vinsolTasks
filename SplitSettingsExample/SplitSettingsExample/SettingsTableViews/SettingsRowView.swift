@@ -35,7 +35,7 @@ class SettingsRowView: UITableViewCell {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "settingsChange"), object: nil)
     }
     
-    func setCornerRadius(view: UIView) {
+    private func setCornerRadius(view: UIView) {
         view.layer.cornerRadius = 6.0
         view.layer.borderColor = UIColor.clear.cgColor
         view.layer.borderWidth = 0.0
