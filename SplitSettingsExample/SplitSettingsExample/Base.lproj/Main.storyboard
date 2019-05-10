@@ -44,10 +44,11 @@
         <scene sceneID="smW-Zh-WAh">
             <objects>
                 <tableViewController storyboardIdentifier="MasterViewController" title="Settings" useStoryboardIdentifierAsRestorationIdentifier="YES" clearsSelectionOnViewWillAppear="NO" id="7bK-jq-Zjz" customClass="MasterViewController" customModule="SplitSettingsExample" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="r7i-6Z-zg0">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="r7i-6Z-zg0">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="1366"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <viewLayoutGuide key="safeArea" id="Ebo-H4-JRK"/>
                         <sections/>
                         <connections>
                             <outlet property="dataSource" destination="7bK-jq-Zjz" id="Gho-Na-rnu"/>
@@ -95,10 +96,10 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="WQw-DA-GzZ" secondAttribute="bottom" id="7xv-tW-yvx"/>
-                            <constraint firstItem="WQw-DA-GzZ" firstAttribute="leading" secondItem="Y45-OY-h0A" secondAttribute="leading" id="Cyk-lc-iCN"/>
-                            <constraint firstItem="WQw-DA-GzZ" firstAttribute="trailing" secondItem="Y45-OY-h0A" secondAttribute="trailing" id="bt6-dh-Tq3"/>
-                            <constraint firstItem="WQw-DA-GzZ" firstAttribute="top" secondItem="U88-jD-D6K" secondAttribute="top" id="wXj-XI-HuV"/>
+                            <constraint firstItem="WQw-DA-GzZ" firstAttribute="leading" secondItem="Y45-OY-h0A" secondAttribute="leading" id="VSz-sj-BMb"/>
+                            <constraint firstItem="WQw-DA-GzZ" firstAttribute="trailing" secondItem="Y45-OY-h0A" secondAttribute="trailing" id="dWt-RU-toz"/>
+                            <constraint firstItem="WQw-DA-GzZ" firstAttribute="top" secondItem="U88-jD-D6K" secondAttribute="top" id="dmo-OZ-xps"/>
+                            <constraint firstAttribute="bottom" secondItem="WQw-DA-GzZ" secondAttribute="bottom" id="hhI-fJ-Qdb"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Y45-OY-h0A"/>
                     </view>
@@ -109,7 +110,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jtz-WZ-gdu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="581.8359375" y="128.69692532942898"/>
+            <point key="canvasLocation" x="709" y="104"/>
         </scene>
     </scenes>
 </document>

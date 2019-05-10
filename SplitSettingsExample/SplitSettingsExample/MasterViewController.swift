@@ -11,7 +11,7 @@ import UIKit
 class MasterViewController: UITableViewController, UISearchResultsUpdating {
 
     private var detailViewController: DetailViewController? = nil
-    private let settings = settingsData()
+    private let settings = SettingsData()
     
     private let settingsArray = [["Airplane Mode", "Wi-Fi", "Bluetooth", "Mobile Data", "Carrier"],
     ["Notifications", "Do Not Disturb"], ["General", "Wallpaper", "Display & Brightness"]]
@@ -66,11 +66,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating {
     private func setViewOnDidLoad() {
         tableView.register(UINib(nibName: "SettingsHeaderView", bundle: nil), forCellReuseIdentifier: "SettingsHeaderView")
         tableView.register(UINib(nibName: "SettingsSectionHeader", bundle: nil), forCellReuseIdentifier: "SettingsSectionHeader")
-        tableView.register(UINib(nibName: "SettingsRowView", bundle: nil), forCellReuseIdentifier: "SettingsRowView")
-    }
-    
-    private func notificationObserver() {
-        NotificationCenter.default.addObserver(self, selector: #selector(valuesEdited), name: NSNotification.Name("settingsChange"), object: nil)
+        tableView.register(UINib(nibName: "SettingsTableViewCell", bundle: nil), forCellReuseIdentifier: "SettingsTableViewCell")
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -78,19 +74,27 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating {
         super.viewWillAppear(animated)
     }
     
+    private func notificationObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(valuesEdited), name: NSNotification.Name("settingsChange"), object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name("settingsChange"), object: nil)
+    }
+    
 }
 
 //MARK: table view functions
 extension MasterViewController {
     override func numberOfSections(in tableView: UITableView) -> Int {
-        if (resultSearchController.isActive) {
+        if resultSearchController.isActive {
             return 1
         }
         return 3
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if (resultSearchController.isActive) {
+        if resultSearchController.isActive {
             return nil
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsSectionHeader") as! SettingsSectionHeader
@@ -98,7 +102,7 @@ extension MasterViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if (resultSearchController.isActive) {
+        if resultSearchController.isActive {
             return 0
         }
         return 40.0
@@ -109,25 +113,16 @@ extension MasterViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if  (resultSearchController.isActive) {
+        if  resultSearchController.isActive {
             return filteredTableData.count
         } else {
-            if section == 0 {
-                return 5
-            }
-            if section == 1 {
-                return 2
-            }
-            if section == 2 {
-                return 3
-            }
-            return 0
+            return settingsArray[section].count
         }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsRowView", for: indexPath) as! SettingsRowView
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsTableViewCell", for: indexPath) as! SettingsTableViewCell
         cell.selectionStyle = .none
         
         var viewColor = UIColor()
@@ -143,7 +138,7 @@ extension MasterViewController {
         cell.hideAndShowItems(isColorView: false, isArrow: false, isDetail: true, isToggle: true)
         cell.setColorViewWidth(value: 36.0)
         
-        if (resultSearchController.isActive) {
+        if resultSearchController.isActive {
             cell.setTitleText(text: filteredTableData[indexPath.row])
             return cell
         } else {

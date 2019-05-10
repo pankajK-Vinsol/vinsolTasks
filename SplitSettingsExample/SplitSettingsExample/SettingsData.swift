@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct settingsData {
+struct SettingsData {
     
     let defaults: UserDefaults = UserDefaults.standard
     

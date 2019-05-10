@@ -23,7 +23,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="72.5"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9gG-Bk-HVJ">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="72.5"/>
+                                <rect key="frame" x="15" y="0.0" width="290" height="72.5"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="ocq-FI-3jc"/>
                                 </constraints>
@@ -43,10 +43,10 @@
                         </subviews>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="9gG-Bk-HVJ" secondAttribute="trailing" id="K5b-MK-e1b"/>
+                            <constraint firstAttribute="trailing" secondItem="9gG-Bk-HVJ" secondAttribute="trailing" constant="15" id="K5b-MK-e1b"/>
                             <constraint firstItem="9gG-Bk-HVJ" firstAttribute="top" secondItem="UXn-SL-APE" secondAttribute="top" id="LmF-Hv-8C0"/>
                             <constraint firstAttribute="bottom" secondItem="9gG-Bk-HVJ" secondAttribute="bottom" id="dnv-qD-NMB"/>
-                            <constraint firstItem="9gG-Bk-HVJ" firstAttribute="leading" secondItem="UXn-SL-APE" secondAttribute="leading" id="oRS-Q8-ltH"/>
+                            <constraint firstItem="9gG-Bk-HVJ" firstAttribute="leading" secondItem="UXn-SL-APE" secondAttribute="leading" constant="15" id="oRS-Q8-ltH"/>
                         </constraints>
                     </view>
                 </subviews>

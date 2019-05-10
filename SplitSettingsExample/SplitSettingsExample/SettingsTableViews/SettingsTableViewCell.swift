@@ -8,12 +8,12 @@
 
 import UIKit
 
-class SettingsRowView: UITableViewCell {
+class SettingsTableViewCell: UITableViewCell {
 
     @IBOutlet weak private var roundedView: UIView!
-    @IBOutlet weak private var title: UILabel!
-    @IBOutlet weak private var arrow: UIImageView!
-    @IBOutlet weak private var detail: UILabel!
+    @IBOutlet weak private var titleLabel: UILabel!
+    @IBOutlet weak private var arrowImageView: UIImageView!
+    @IBOutlet weak private var detailLabel: UILabel!
     @IBOutlet weak private var toggleOption: UISwitch!
     @IBOutlet weak private var colorViewWidth: NSLayoutConstraint!
         
@@ -48,17 +48,17 @@ class SettingsRowView: UITableViewCell {
     
     func hideAndShowItems(isColorView: Bool, isArrow:Bool, isDetail: Bool, isToggle: Bool) {
         roundedView.isHidden = isColorView
-        arrow.isHidden = isArrow
-        detail.isHidden = isDetail
+        arrowImageView.isHidden = isArrow
+        detailLabel.isHidden = isDetail
         toggleOption.isHidden = isToggle
     }
     
     func setTitleText(text: String) {
-        title.text = text
+        titleLabel.text = text
     }
     
     func setDetailText(text: String) {
-        detail.text = text
+        detailLabel.text = text
     }
     
     func setToggleValue(value: Bool) {

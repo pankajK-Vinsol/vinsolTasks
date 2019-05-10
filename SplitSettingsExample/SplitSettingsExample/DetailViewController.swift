@@ -13,7 +13,7 @@ class DetailViewController: UIViewController {
     @IBOutlet weak private var detailsTableView: UITableView!
     
     var indexTag = "Wi-Fi"
-    private let settings = settingsData()
+    private let settings = SettingsData()
     
     private let networkArray = ["Network1", "Network2", "Network3", "Network4", "Network5"]
     private let carrierArray = ["Carrier1", "Carrier2", "Carrier3", "Carrier4", "Carrier5"]
@@ -35,7 +35,7 @@ class DetailViewController: UIViewController {
     private func setViewOnDidLoad() {
         detailsTableView.register(UINib(nibName: "SettingsHeaderView", bundle: nil), forCellReuseIdentifier: "SettingsHeaderView")
         detailsTableView.register(UINib(nibName: "SettingsSectionHeader", bundle: nil), forCellReuseIdentifier: "SettingsSectionHeader")
-        detailsTableView.register(UINib(nibName: "SettingsRowView", bundle: nil), forCellReuseIdentifier: "SettingsRowView")
+        detailsTableView.register(UINib(nibName: "SettingsTableViewCell", bundle: nil), forCellReuseIdentifier: "SettingsTableViewCell")
         detailsTableView.register(UINib(nibName: "DNDSettingsFooter", bundle: nil), forCellReuseIdentifier: "DNDSettingsFooter")
     }
     
@@ -120,7 +120,7 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
  
-        let cell = detailsTableView.dequeueReusableCell(withIdentifier: "SettingsRowView", for: indexPath) as! SettingsRowView
+        let cell = detailsTableView.dequeueReusableCell(withIdentifier: "SettingsTableViewCell", for: indexPath) as! SettingsTableViewCell
         cell.selectionStyle = .none
         
         cell.hideAndShowItems(isColorView: true, isArrow: true, isDetail: true, isToggle: false)
