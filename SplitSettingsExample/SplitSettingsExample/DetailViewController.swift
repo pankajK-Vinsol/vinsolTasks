@@ -97,12 +97,12 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = detailsTableView.dequeueReusableCell(withIdentifier: "SettingsTableViewCell", for: indexPath) as! SettingsTableViewCell
         cell.selectionStyle = .none
-        
         cell.hideArrow(isArrow: true, isDetail: true)
         cell.setColorViewWidth(value: 0.0)
         cell.setTextString(text: detailsArray[indexPath.section][indexPath.row], type: 1)
-
-        if indexTag == "Wi-Fi" {
+        
+        switch indexTag {
+        case "Wi-Fi":
             if indexPath.section == 0 {
                 let wifiValue = defaults.bool(forKey: "wifiState")
                 cell.setToggleValue(value: wifiValue)
@@ -112,15 +112,13 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
             } else if indexPath.section == 1 {
                 cell.hideArrow(isArrow: false, isDetail: true)
             }
-        }
-        if indexTag == "Bluetooth" {
+        case "Bluetooth":
             let bluetoothValue = defaults.bool(forKey: "bluetooth")
             cell.setToggleValue(value: bluetoothValue)
             cell.toggleAction = { [self] in
                 self.defaults.set(!bluetoothValue, forKey: "bluetooth")
             }
-        }
-        if indexTag == "Mobile Data" {
+        case "Mobile Data":
             if indexPath.row == 0 {
                 let mobileDataValue = defaults.bool(forKey: "mobileData")
                 cell.setToggleValue(value: mobileDataValue)
@@ -131,25 +129,21 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
                 cell.hideArrow(isArrow: false, isDetail: false)
                 cell.setTextString(text: "Roaming On", type: 2)
             }
-        }
-        if indexTag == "Carrier" || indexTag == "General" || indexTag == "Wallpaper"{
+        case "Carrier", "General", "Wallpaper":
             cell.hideArrow(isArrow: false, isDetail: true)
-        }
-        if indexTag == "Notifications" {
+        case "Notifications":
             let notifyValue = defaults.bool(forKey: "notificationState")
             cell.setToggleValue(value: notifyValue)
             cell.toggleAction = { [self] in
                 self.defaults.set(!notifyValue, forKey: "notificationState")
             }
-        }
-        if indexTag == "Do Not Disturb" {
+        case "Do Not Disturb":
             let dndValue = defaults.bool(forKey: "dnd")
             cell.setToggleValue(value: dndValue)
             cell.toggleAction = { [self] in
                 self.defaults.set(!dndValue, forKey: "dnd")
             }
-        }
-        if indexTag == "Display & Brightness" {
+        case "Display & Brightness":
             cell.hideArrow(isArrow: false, isDetail: false)
             if indexPath.section == 1 {
                 if indexPath.row == 0 {
@@ -157,9 +151,13 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
                 }
             } else if indexPath.section == 2 {
                 if indexPath.row == 0 {
-                    cell.hideArrow(isArrow: false, isDetail: true)
+                    cell.setTextString(text: "Medium", type: 2)
+                } else {
+                    cell.setTextString(text: "Enabled", type: 2)
                 }
             }
+        default:
+            break
         }
         return cell
     }
