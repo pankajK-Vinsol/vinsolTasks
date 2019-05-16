@@ -21,7 +21,6 @@ class SettingsTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
         setCornerRadius(view: roundedView)
         toggleOption.addTarget(self, action: #selector(toggleClick(_:)), for: .touchUpInside)
     }
@@ -42,31 +41,52 @@ class SettingsTableViewCell: UITableViewCell {
         view.clipsToBounds = true
     }
     
-    func setBackgroundColor(color: UIColor) {
+    func setColorViewWidth(value: Float) {
+        colorViewWidth.constant = CGFloat(value)
+    }
+    
+    func setBackgroundColor(remainder: Int) {
+        var color = UIColor()
+        switch remainder {
+        case 0:
+            color = UIColor().customRedColor
+        case 1:
+            color = UIColor().customBlueColor
+        case 2:
+            color = UIColor().customYellowColor
+        default:
+            print("Unknown")
+        }
         roundedView.backgroundColor = color
     }
     
-    func hideAndShowItems(isColorView: Bool, isArrow:Bool, isDetail: Bool, isToggle: Bool) {
-        roundedView.isHidden = isColorView
+    func hideArrow(isArrow:Bool, isDetail:Bool) {
         arrowImageView.isHidden = isArrow
         detailLabel.isHidden = isDetail
-        toggleOption.isHidden = isToggle
+        toggleOption.isHidden = !isArrow
     }
     
-    func setTitleText(text: String) {
-        titleLabel.text = text
-    }
-    
-    func setDetailText(text: String) {
-        detailLabel.text = text
+    func setTextString(text: String, type: Int) {
+        if type == 1 {
+            titleLabel.text = text
+        } else {
+            detailLabel.text = text
+        }
     }
     
     func setToggleValue(value: Bool) {
         toggleOption.isOn = value
     }
-    
-    func setColorViewWidth(value: Float) {
-        colorViewWidth.constant = CGFloat(value)
+}
+
+extension UIColor {
+    var customRedColor: UIColor {
+        return UIColor(red: 251.0/255, green: 58.0/255, blue: 48.0/255, alpha: 1.0)
     }
-    
+    var customBlueColor: UIColor {
+        return UIColor(red: 21.0/255, green: 122.0/255, blue: 251.0/255, alpha: 1.0)
+    }
+    var customYellowColor: UIColor {
+        return UIColor(red: 253.0/255, green: 149.0/255, blue: 38.0/255, alpha: 1.0)
+    }
 }

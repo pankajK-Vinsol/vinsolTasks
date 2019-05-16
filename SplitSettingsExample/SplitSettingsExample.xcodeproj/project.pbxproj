@@ -17,10 +17,7 @@
 		460394A322796FBD004F9FEA /* SplitSettingsExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460394A222796FBD004F9FEA /* SplitSettingsExampleUITests.swift */; };
 		460394B122797337004F9FEA /* ic_keyboard.png in Resources */ = {isa = PBXBuildFile; fileRef = 460394B022797336004F9FEA /* ic_keyboard.png */; };
 		460394BA22797356004F9FEA /* SettingsSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 460394B422797355004F9FEA /* SettingsSectionHeader.xib */; };
-		460394BB22797356004F9FEA /* SettingsHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 460394B522797355004F9FEA /* SettingsHeaderView.xib */; };
-		460394BD22797356004F9FEA /* SettingsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460394B722797355004F9FEA /* SettingsHeaderView.swift */; };
 		460394BE22797356004F9FEA /* SettingsSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460394B822797355004F9FEA /* SettingsSectionHeader.swift */; };
-		460394C02279CFCC004F9FEA /* SettingsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460394BF2279CFCC004F9FEA /* SettingsData.swift */; };
 		46A98154227C25970002269E /* DNDSettingsFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A98152227C25970002269E /* DNDSettingsFooter.swift */; };
 		46A98155227C25970002269E /* DNDSettingsFooter.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46A98153227C25970002269E /* DNDSettingsFooter.xib */; };
 		46FDA04B22856F6800F2031F /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460394B322797355004F9FEA /* SettingsTableViewCell.swift */; };
@@ -62,11 +59,8 @@
 		460394B022797336004F9FEA /* ic_keyboard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_keyboard.png; sourceTree = "<group>"; };
 		460394B322797355004F9FEA /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
 		460394B422797355004F9FEA /* SettingsSectionHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsSectionHeader.xib; sourceTree = "<group>"; };
-		460394B522797355004F9FEA /* SettingsHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsHeaderView.xib; sourceTree = "<group>"; };
 		460394B622797355004F9FEA /* SettingsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsTableViewCell.xib; sourceTree = "<group>"; };
-		460394B722797355004F9FEA /* SettingsHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsHeaderView.swift; sourceTree = "<group>"; };
 		460394B822797355004F9FEA /* SettingsSectionHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsSectionHeader.swift; sourceTree = "<group>"; };
-		460394BF2279CFCC004F9FEA /* SettingsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsData.swift; sourceTree = "<group>"; };
 		46A98152227C25970002269E /* DNDSettingsFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DNDSettingsFooter.swift; sourceTree = "<group>"; };
 		46A98153227C25970002269E /* DNDSettingsFooter.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DNDSettingsFooter.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -122,7 +116,6 @@
 				4603948022796FBC004F9FEA /* AppDelegate.swift */,
 				4603948222796FBC004F9FEA /* MasterViewController.swift */,
 				4603948422796FBC004F9FEA /* DetailViewController.swift */,
-				460394BF2279CFCC004F9FEA /* SettingsData.swift */,
 				4603948622796FBC004F9FEA /* Main.storyboard */,
 				4603948922796FBD004F9FEA /* Assets.xcassets */,
 				4603948B22796FBD004F9FEA /* LaunchScreen.storyboard */,
@@ -156,9 +149,7 @@
 			children = (
 				460394B322797355004F9FEA /* SettingsTableViewCell.swift */,
 				460394B422797355004F9FEA /* SettingsSectionHeader.xib */,
-				460394B522797355004F9FEA /* SettingsHeaderView.xib */,
 				460394B622797355004F9FEA /* SettingsTableViewCell.xib */,
-				460394B722797355004F9FEA /* SettingsHeaderView.swift */,
 				460394B822797355004F9FEA /* SettingsSectionHeader.swift */,
 				46A98152227C25970002269E /* DNDSettingsFooter.swift */,
 				46A98153227C25970002269E /* DNDSettingsFooter.xib */,
@@ -276,7 +267,6 @@
 				4603948A22796FBD004F9FEA /* Assets.xcassets in Resources */,
 				460394B122797337004F9FEA /* ic_keyboard.png in Resources */,
 				46A98155227C25970002269E /* DNDSettingsFooter.xib in Resources */,
-				460394BB22797356004F9FEA /* SettingsHeaderView.xib in Resources */,
 				4603948822796FBC004F9FEA /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -304,9 +294,7 @@
 			files = (
 				46FDA04B22856F6800F2031F /* SettingsTableViewCell.swift in Sources */,
 				46A98154227C25970002269E /* DNDSettingsFooter.swift in Sources */,
-				460394C02279CFCC004F9FEA /* SettingsData.swift in Sources */,
 				4603948522796FBC004F9FEA /* DetailViewController.swift in Sources */,
-				460394BD22797356004F9FEA /* SettingsHeaderView.swift in Sources */,
 				460394BE22797356004F9FEA /* SettingsSectionHeader.swift in Sources */,
 				4603948322796FBC004F9FEA /* MasterViewController.swift in Sources */,
 				4603948122796FBC004F9FEA /* AppDelegate.swift in Sources */,

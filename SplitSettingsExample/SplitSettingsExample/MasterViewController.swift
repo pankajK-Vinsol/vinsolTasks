@@ -11,7 +11,7 @@ import UIKit
 class MasterViewController: UITableViewController, UISearchResultsUpdating {
 
     private var detailViewController: DetailViewController? = nil
-    private let settings = SettingsData()
+    private var defaults = UserDefaults.standard
     
     private let settingsArray = [["Airplane Mode", "Wi-Fi", "Bluetooth", "Mobile Data", "Carrier"],
     ["Notifications", "Do Not Disturb"], ["General", "Wallpaper", "Display & Brightness"]]
@@ -19,26 +19,36 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating {
     private let tableData = ["Airplane Mode", "Wi-Fi", "Bluetooth", "Mobile Data", "Carrier",
     "Notifications", "Do Not Disturb", "General", "Wallpaper", "Display & Brightness"]
     
+    private let settingsDictionaryData = [["Airplane Mode": [[]], "Wi-Fi": [["Wi-Fi"],["Network1", "Network2", "Network3", "Network4", "Network5"]], "Bluetooth": [["Bluetooth"]], "Mobile Data": [["Cellular Data", "Cellular Data Options"]], "Carrier": [["Carrier1", "Carrier2", "Carrier3", "Carrier4", "Carrier5"]]], ["Notifications": [["Notifications"]], "Do Not Disturb": [["Do Not Disturb"]]], ["General": [["This is general screen"]], "Wallpaper": [["This is wallpaper screen"]], "Display & Brightness": [["Brightness"], ["Night-Shift", "Auto-Lock"], ["Text-Size", "Bold Text"], ["View"]]]]
+    
     private var filteredTableData = [String]()
     private var resultSearchController = UISearchController()
     
-    func updateSearchResults(for searchController: UISearchController) {
-        filteredTableData.removeAll(keepingCapacity: false)
-        
-        let searchPredicate = NSPredicate(format: "SELF CONTAINS[c] %@", searchController.searchBar.text!)
-        let array = (tableData as NSArray).filtered(using: searchPredicate)
-        filteredTableData = array as! [String]
-        
-        self.tableView.reloadData()
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        setSplitView()
         setViewOnDidLoad()
+        setSplitView()
         setSearchController()
+    }
+    
+    private func setViewOnDidLoad() {
+        tableView.register(UINib(nibName: "SettingsHeaderView", bundle: nil), forCellReuseIdentifier: "SettingsHeaderView")
+        tableView.register(UINib(nibName: "SettingsSectionHeader", bundle: nil), forCellReuseIdentifier: "SettingsSectionHeader")
+        tableView.register(UINib(nibName: "SettingsTableViewCell", bundle: nil), forCellReuseIdentifier: "SettingsTableViewCell")
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        clearsSelectionOnViewWillAppear = splitViewController!.isCollapsed
+        super.viewWillAppear(animated)
         notificationObserver()
+    }
+    
+    private func setSplitView() {
+        if let split = splitViewController {
+            let controllers = split.viewControllers
+            split.preferredDisplayMode = .allVisible
+            detailViewController = (controllers[controllers.count - 1] as! UINavigationController).topViewController as? DetailViewController
+        }
     }
     
     private func setSearchController() {
@@ -51,37 +61,20 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating {
             tableView.tableHeaderView = controller.searchBar
             return controller
         })()
-        
         tableView.reloadData()
-    }
-    
-    private func setSplitView() {
-        if let split = splitViewController {
-            let controllers = split.viewControllers
-            split.preferredDisplayMode = .allVisible
-            detailViewController = (controllers[controllers.count - 1] as! UINavigationController).topViewController as? DetailViewController
-        }
-    }
-    
-    private func setViewOnDidLoad() {
-        tableView.register(UINib(nibName: "SettingsHeaderView", bundle: nil), forCellReuseIdentifier: "SettingsHeaderView")
-        tableView.register(UINib(nibName: "SettingsSectionHeader", bundle: nil), forCellReuseIdentifier: "SettingsSectionHeader")
-        tableView.register(UINib(nibName: "SettingsTableViewCell", bundle: nil), forCellReuseIdentifier: "SettingsTableViewCell")
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        clearsSelectionOnViewWillAppear = splitViewController!.isCollapsed
-        super.viewWillAppear(animated)
     }
     
     private func notificationObserver() {
         NotificationCenter.default.addObserver(self, selector: #selector(valuesEdited), name: NSNotification.Name("settingsChange"), object: nil)
     }
     
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name("settingsChange"), object: nil)
+    func updateSearchResults(for searchController: UISearchController) {
+        filteredTableData.removeAll(keepingCapacity: false)
+        let searchPredicate = NSPredicate(format: "SELF CONTAINS[c] %@", searchController.searchBar.text!)
+        let array = (tableData as NSArray).filtered(using: searchPredicate)
+        filteredTableData = array as! [String]
+        self.tableView.reloadData()
     }
-    
 }
 
 //MARK: table view functions
@@ -90,7 +83,7 @@ extension MasterViewController {
         if resultSearchController.isActive {
             return 1
         }
-        return 3
+        return settingsArray.count
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -115,92 +108,92 @@ extension MasterViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if  resultSearchController.isActive {
             return filteredTableData.count
-        } else {
-            return settingsArray[section].count
         }
+        return settingsArray[section].count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsTableViewCell", for: indexPath) as! SettingsTableViewCell
         cell.selectionStyle = .none
         
-        var viewColor = UIColor()
-        if indexPath.row % 3 == 2 {
-            viewColor = UIColor(red: 253.0/255, green: 149.0/255, blue: 38.0/255, alpha: 1.0)
-        } else if indexPath.row % 3 == 1 {
-            viewColor = UIColor(red: 21.0/255, green: 122.0/255, blue: 251.0/255, alpha: 1.0)
-        } else {
-            viewColor = UIColor(red: 251.0/255, green: 58.0/255, blue: 48.0/255, alpha: 1.0)
-        }
-        
-        cell.setBackgroundColor(color: viewColor)
-        cell.hideAndShowItems(isColorView: false, isArrow: false, isDetail: true, isToggle: true)
+        let remainder = indexPath.row % 3
+        cell.setBackgroundColor(remainder: remainder)
+        cell.hideArrow(isArrow: false, isDetail: true)
         cell.setColorViewWidth(value: 36.0)
         
         if resultSearchController.isActive {
-            cell.setTitleText(text: filteredTableData[indexPath.row])
+            cell.setTextString(text: filteredTableData[indexPath.row], type: 1)
             return cell
         } else {
             let titleText = settingsArray[indexPath.section][indexPath.row]
-            cell.setTitleText(text: titleText)
+            cell.setTextString(text: titleText, type: 1)
             
             if indexPath.section == 0 {
-                if indexPath.row == 3 {
-                    cell.hideAndShowItems(isColorView: false, isArrow: false, isDetail: true, isToggle: true)
-                } else {
-                    cell.hideAndShowItems(isColorView: false, isArrow: false, isDetail: false, isToggle: true)
-                }
-                if indexPath.row == 0 {
-                    cell.hideAndShowItems(isColorView: false, isArrow: true, isDetail: true, isToggle: false)
-                    
-                    let airplaneValue = settings.airplaneMode ?? false
-                    cell.setToggleValue(value: settings.airplaneMode ?? false)
-                    
+                cell.hideArrow(isArrow: false, isDetail: false)
+                switch indexPath.row {
+                case 0:
+                    cell.hideArrow(isArrow: true, isDetail: true)
+                    let airplaneValue = defaults.bool(forKey: "airplaneMode")
+                    cell.setToggleValue(value: airplaneValue)
                     cell.toggleAction = { [self] in
-                        self.settings.defaults.set(!airplaneValue, forKey: "airplaneMode")
+                        self.defaults.set(!airplaneValue, forKey: "airplaneMode")
                     }
-                }
-                if indexPath.row == 1 {
-                    let wifiValue = settings.wifiState ?? false
+                case 1:
+                    let wifiValue = defaults.bool(forKey: "wifiState")
                     if wifiValue {
-                        cell.setDetailText(text: settings.wifiName ?? "")
+                        let wifiName = defaults.string(forKey: "wifiName") ?? ""
+                        cell.setTextString(text: wifiName, type: 2)
                     } else {
-                        cell.setDetailText(text: "")
+                        cell.setTextString(text: "", type: 2)
                     }
-                }
-                if indexPath.row == 2 {
-                    let bluetooth = settings.bluetooth ?? false
+                case 2:
+                    let bluetooth = defaults.bool(forKey: "bluetooth")
                     if bluetooth {
-                        cell.setDetailText(text: "On")
+                        cell.setTextString(text: "On", type: 2)
                     } else {
-                        cell.setDetailText(text: "Off")
+                        cell.setTextString(text: "Off", type: 2)
                     }
-                }
-                if indexPath.row == 4 {
-                    cell.setDetailText(text: settings.networkName ?? "")
+                case 4:
+                    let networkName = defaults.string(forKey: "networkName") ?? ""
+                    cell.setTextString(text: networkName, type: 2)
+                default:
+                    break
                 }
             }
             return cell
         }
     }
-    
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let splitView = self.splitViewController else {
             return
         }
- 
-        if splitView.isCollapsed {
-            let nextVC: DetailViewController = self.storyboard?.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
-            if (resultSearchController.isActive) {
-                nextVC.indexTag = filteredTableData[indexPath.row]
-            } else {
-                nextVC.indexTag = settingsArray[indexPath.section][indexPath.row]
-            }
-            self.navigationController?.pushViewController(nextVC, animated: true)
+        
+        let nextVC: DetailViewController = self.storyboard?.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
+        if resultSearchController.isActive {
+            nextVC.indexTag = filteredTableData[indexPath.row]
         } else {
-            if (detailViewController != nil) {
-                if (resultSearchController.isActive) {
+            nextVC.indexTag = settingsArray[indexPath.section][indexPath.row]
+        }
+        var matchedData = [[String]]()
+        for index in 0 ... settingsDictionaryData.count - 1 {
+            let settingsData = settingsDictionaryData[index]
+            for settingsKey in settingsData.keys {
+                if settingsKey == nextVC.indexTag {
+                    matchedData = settingsData.first(where: { $0.key == nextVC.indexTag })?.value ?? [[String]]()
+                }
+            }
+        }
+        
+        if splitView.isCollapsed {
+            nextVC.detailsArray = matchedData
+            if !matchedData.isEmpty {
+                self.navigationController?.pushViewController(nextVC, animated: true)
+            }
+        } else {
+            if detailViewController != nil {
+                self.detailViewController?.detailsArray = matchedData
+                if resultSearchController.isActive {
                     self.detailViewController?.detailItem = filteredTableData[indexPath.row]
                 } else {
                     self.detailViewController?.detailItem = settingsArray[indexPath.section][indexPath.row]
@@ -211,7 +204,6 @@ extension MasterViewController {
 }
 
 extension MasterViewController {
-    
     //MARK: value changed notification action
     @objc private func valuesEdited(notification: NSNotification) {
         tableView.reloadData()
