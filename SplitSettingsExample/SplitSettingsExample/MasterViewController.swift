@@ -175,9 +175,9 @@ extension MasterViewController {
         } else {
             nextVC.indexTag = settingsArray[indexPath.section][indexPath.row]
         }
+        
         var matchedData = [[String]]()
-        for index in 0 ... settingsDictionaryData.count - 1 {
-            let settingsData = settingsDictionaryData[index]
+        for settingsData in settingsDictionaryData {
             for settingsKey in settingsData.keys {
                 if settingsKey == nextVC.indexTag {
                     matchedData = settingsData.first(where: { $0.key == nextVC.indexTag })?.value ?? [[String]]()
@@ -187,7 +187,7 @@ extension MasterViewController {
         
         if splitView.isCollapsed {
             nextVC.detailsArray = matchedData
-            if !matchedData.isEmpty {
+            if !matchedData[0].isEmpty {
                 self.navigationController?.pushViewController(nextVC, animated: true)
             }
         } else {

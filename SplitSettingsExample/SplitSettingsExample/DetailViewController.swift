@@ -129,8 +129,6 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
                 cell.hideArrow(isArrow: false, isDetail: false)
                 cell.setTextString(text: "Roaming On", type: 2)
             }
-        case "Carrier", "General", "Wallpaper":
-            cell.hideArrow(isArrow: false, isDetail: true)
         case "Notifications":
             let notifyValue = defaults.bool(forKey: "notificationState")
             cell.setToggleValue(value: notifyValue)
@@ -156,6 +154,8 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
                     cell.setTextString(text: "Enabled", type: 2)
                 }
             }
+        case "Carrier", "General", "Wallpaper":
+            cell.hideArrow(isArrow: false, isDetail: true)
         default:
             break
         }
