@@ -106,7 +106,7 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
             if indexPath.section == 0 {
                 let wifiValue = defaults.bool(forKey: "wifiState")
                 cell.setToggleValue(value: wifiValue)
-                cell.toggleAction = { [self] in
+                cell.toggleAction = { [unowned self] in
                     self.defaults.set(!wifiValue, forKey: "wifiState")
                 }
             } else if indexPath.section == 1 {
@@ -115,14 +115,14 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
         case "Bluetooth":
             let bluetoothValue = defaults.bool(forKey: "bluetooth")
             cell.setToggleValue(value: bluetoothValue)
-            cell.toggleAction = { [self] in
+            cell.toggleAction = { [unowned self] in
                 self.defaults.set(!bluetoothValue, forKey: "bluetooth")
             }
         case "Mobile Data":
             if indexPath.row == 0 {
                 let mobileDataValue = defaults.bool(forKey: "mobileData")
                 cell.setToggleValue(value: mobileDataValue)
-                cell.toggleAction = { [self] in
+                cell.toggleAction = { [unowned self] in
                     self.defaults.set(!mobileDataValue, forKey: "mobileData")
                 }
             } else {
@@ -132,13 +132,13 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
         case "Notifications":
             let notifyValue = defaults.bool(forKey: "notificationState")
             cell.setToggleValue(value: notifyValue)
-            cell.toggleAction = { [self] in
+            cell.toggleAction = { [unowned self] in
                 self.defaults.set(!notifyValue, forKey: "notificationState")
             }
         case "Do Not Disturb":
             let dndValue = defaults.bool(forKey: "dnd")
             cell.setToggleValue(value: dndValue)
-            cell.toggleAction = { [self] in
+            cell.toggleAction = { [unowned self] in
                 self.defaults.set(!dndValue, forKey: "dnd")
             }
         case "Display & Brightness":
@@ -165,7 +165,12 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexTag == "Wi-Fi" {
             if indexPath.section == 1 {
-                defaults.set(detailsArray[indexPath.section][indexPath.row], forKey: "wifiName")
+                let wifiValue = defaults.bool(forKey: "wifiState")
+                if wifiValue {
+                    defaults.set(detailsArray[indexPath.section][indexPath.row], forKey: "wifiName")
+                } else {
+                    defaults.set("", forKey: "wifiName")
+                }
             }
         } else if indexTag == "Carrier" {
             defaults.set(detailsArray[indexPath.section][indexPath.row], forKey: "networkName")

@@ -135,17 +135,12 @@ extension MasterViewController {
                     cell.hideArrow(isArrow: true, isDetail: true)
                     let airplaneValue = defaults.bool(forKey: "airplaneMode")
                     cell.setToggleValue(value: airplaneValue)
-                    cell.toggleAction = { [self] in
+                    cell.toggleAction = { [unowned self] in
                         self.defaults.set(!airplaneValue, forKey: "airplaneMode")
                     }
                 case 1:
-                    let wifiValue = defaults.bool(forKey: "wifiState")
-                    if wifiValue {
-                        let wifiName = defaults.string(forKey: "wifiName") ?? ""
-                        cell.setTextString(text: wifiName, type: 2)
-                    } else {
-                        cell.setTextString(text: "", type: 2)
-                    }
+                    let wifiName = defaults.string(forKey: "wifiName") ?? ""
+                    cell.setTextString(text: wifiName, type: 2)
                 case 2:
                     let bluetooth = defaults.bool(forKey: "bluetooth")
                     if bluetooth {
