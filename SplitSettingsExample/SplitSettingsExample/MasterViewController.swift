@@ -69,10 +69,14 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating {
     }
     
     func updateSearchResults(for searchController: UISearchController) {
-        filteredTableData.removeAll(keepingCapacity: false)
-        let searchPredicate = NSPredicate(format: "SELF CONTAINS[c] %@", searchController.searchBar.text!)
-        let array = (tableData as NSArray).filtered(using: searchPredicate)
-        filteredTableData = array as! [String]
+        if searchController.searchBar.text!.count > 0 {
+            filteredTableData.removeAll(keepingCapacity: false)
+            let searchPredicate = NSPredicate(format: "SELF CONTAINS[c] %@", searchController.searchBar.text!)
+            let array = (tableData as NSArray).filtered(using: searchPredicate)
+            filteredTableData = array as! [String]
+        } else {
+            filteredTableData = tableData
+        }
         self.tableView.reloadData()
     }
 }
@@ -163,7 +167,6 @@ extension MasterViewController {
         guard let splitView = self.splitViewController else {
             return
         }
-        
         let nextVC: DetailViewController = self.storyboard?.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
         if resultSearchController.isActive {
             nextVC.indexTag = filteredTableData[indexPath.row]
@@ -184,6 +187,7 @@ extension MasterViewController {
             nextVC.detailsArray = matchedData
             if !matchedData[0].isEmpty {
                 self.navigationController?.pushViewController(nextVC, animated: true)
+                resultSearchController.isActive = false
             }
         } else {
             if detailViewController != nil {

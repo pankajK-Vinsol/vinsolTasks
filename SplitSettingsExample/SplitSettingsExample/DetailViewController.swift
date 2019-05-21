@@ -62,9 +62,12 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsSectionHeader") as! SettingsSectionHeader
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 0
+        if section == 0 {
+            return 0
+        }
+        return 40.0
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
@@ -86,6 +89,8 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if indexTag == "Do Not Disturb" || indexTag == "Mobile Data"{
             return 100.0
+        } else if section == detailsArray.count - 1 {
+            return 1.0
         }
         return 0.01
     }
@@ -101,6 +106,12 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
         cell.setColorViewWidth(value: 0.0)
         cell.setTextString(text: detailsArray[indexPath.section][indexPath.row], type: 1)
         
+        let cell2 : UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell") ?? UITableViewCell()
+        cell2.textLabel?.text = detailsArray[indexPath.section][indexPath.row]
+        cell2.textLabel?.font = UIFont.systemFont(ofSize: 20.0, weight: .medium)
+        tableView.separatorStyle = UITableViewCell.SeparatorStyle.singleLine
+        cell2.selectionStyle = .none
+        
         switch indexTag {
         case "Wi-Fi":
             if indexPath.section == 0 {
@@ -110,7 +121,10 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
                     self.defaults.set(!wifiValue, forKey: "wifiState")
                 }
             } else if indexPath.section == 1 {
-                cell.hideArrow(isArrow: false, isDetail: true)
+                if detailsArray[indexPath.section][indexPath.row] == defaults.string(forKey: "wifiName") {
+                    cell2.accessoryType = UITableViewCell.AccessoryType.checkmark
+                }
+                return cell2
             }
         case "Bluetooth":
             let bluetoothValue = defaults.bool(forKey: "bluetooth")
@@ -154,8 +168,13 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
                     cell.setTextString(text: "Enabled", type: 2)
                 }
             }
-        case "Carrier", "General", "Wallpaper":
+        case "General", "Wallpaper":
             cell.hideArrow(isArrow: false, isDetail: true)
+        case "Carrier":
+            if detailsArray[indexPath.section][indexPath.row] == defaults.string(forKey: "networkName") {
+                cell2.accessoryType = UITableViewCell.AccessoryType.checkmark
+            }
+            return cell2
         default:
             break
         }
@@ -171,10 +190,13 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
                 } else {
                     defaults.set("", forKey: "wifiName")
                 }
+                self.navigationController?.popViewController(animated: true)
             }
         } else if indexTag == "Carrier" {
             defaults.set(detailsArray[indexPath.section][indexPath.row], forKey: "networkName")
+            self.navigationController?.popViewController(animated: true)
         }
+        self.detailsTableView.reloadData()
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "settingsChange"), object: nil)
     }
 
