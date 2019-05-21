@@ -30,6 +30,10 @@ class DetailViewController: UIViewController {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name("settingsChange"), object: nil)
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     var detailItem: String? {
         didSet {
             self.configureView()
@@ -37,7 +41,6 @@ class DetailViewController: UIViewController {
     }
     
     private func setViewOnDidLoad() {
-        detailsTableView.register(UINib(nibName: "SettingsHeaderView", bundle: nil), forCellReuseIdentifier: "SettingsHeaderView")
         detailsTableView.register(UINib(nibName: "SettingsSectionHeader", bundle: nil), forCellReuseIdentifier: "SettingsSectionHeader")
         detailsTableView.register(UINib(nibName: "SettingsTableViewCell", bundle: nil), forCellReuseIdentifier: "SettingsTableViewCell")
         detailsTableView.register(UINib(nibName: "DNDSettingsFooter", bundle: nil), forCellReuseIdentifier: "DNDSettingsFooter")
